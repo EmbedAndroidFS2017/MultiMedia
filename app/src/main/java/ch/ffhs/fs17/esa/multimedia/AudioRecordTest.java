@@ -81,15 +81,21 @@ public class AudioRecordTest extends AppCompatActivity {
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 
         try {
             mRecorder.prepare();
+            Thread.sleep(1000);
+            mRecorder.start();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
+            Log.e(LOG_TAG, "prepare() / start() failed");
+            if (mRecorder != null){
+                stopRecording();
+                return;
+            }
+        } catch (InterruptedException e) {
+            Log.e(LOG_TAG, "Sleep failed");
         }
-
-        mRecorder.start();
     }
 
     private void stopRecording() {
